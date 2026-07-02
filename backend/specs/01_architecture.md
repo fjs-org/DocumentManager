@@ -8,7 +8,6 @@
 
 ## Core Dependencies
 - Spring Web
-- Spring Data JPA
 
 ## Base Configuration
 - **Package Structure:** `com.documentmanager`

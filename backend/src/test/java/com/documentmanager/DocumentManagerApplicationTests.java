@@ -26,7 +26,13 @@ class DocumentManagerApplicationTests {
 
     @Test
     void healthEndpointReturns200() throws Exception {
-        mockMvc.perform(get("/api/v1/health"))
+        mockMvc.perform(get("/health"))
                .andExpect(status().isOk());
+    }
+
+    @Test
+    void infoEndpointShouldBeDisabled() throws Exception {
+        mockMvc.perform(get("/info"))
+               .andExpect(status().isNotFound());
     }
 }

@@ -14,5 +14,5 @@ Create a security configuration class (`SecurityConfig.java`) that applies the f
 - **Authorization Rules:**
     - Permit all (no authentication required) for: /health, /swagger-ui, /v3/api-docs, /swagger-ui.html
     - All other `/api/v1/**` endpoints: Must be **authenticated**.
-    - Throw error for unauthenticated access attempts.
+    - Throw 403 error for unauthenticated access attempts using error handling and structure of this project.
 

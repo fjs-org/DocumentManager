@@ -1,8 +1,15 @@
 package com.documentmanager.controller;
 
 import com.documentmanager.dto.UserDto;
+import com.documentmanager.exception.ErrorResponse;
 import com.documentmanager.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +25,29 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "basicAuth")
+@Tag(name = "Users", description = "User management endpoints")
 public class UserController {
 
     private final UserService userService;
 
     @GetMapping
+    @Operation(summary = "Get all users", description = "Returns a list of all registered users")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "List of users retrieved successfully")
+    })
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @PostMapping
+    @Operation(summary = "Create a new user", description = "Creates a user and returns the saved entity with generated id and createdAt")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "User created successfully"),
+        @ApiResponse(responseCode = "400", description = "Validation error or email already exists",
+                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto dto) {
         UserDto response = userService.createUser(dto);
-        return ResponseEntity.status(211).body(response);
+        return ResponseEntity.status(201).body(response);
     }
 }

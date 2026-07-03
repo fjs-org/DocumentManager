@@ -26,8 +26,10 @@
     - `.service` -> Business Logic (Each service is an interface with an implementation class)
     - `.repository` -> Database Access
     - `.model` -> JPA Entities
-- **Configuration Files:** `application.yaml` for environment-specific settings.
-- **Swagger UI:** All endpoints are documented and accessible via Swagger UI at `/swagger-ui.html` (unauthenticated).
+- **Configuration Files:** `application.yml` for environment-specific settings.
+- **Swagger UI:** 
+  - All endpoints are documented and accessible via Swagger UI at `/swagger-ui.html` (unauthenticated).
+  - Use @Operation to describe each method in controllers. Also add @ApiResponse for each possible response code.
 
 ## Error Handling
 - **Global Exception Handling:** Use `@ControllerAdvice` to handle exceptions globally.

@@ -86,7 +86,7 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-               .andExpect(status().is(211))
+               .andExpect(status().isCreated())
                .andExpect(jsonPath("$.email").value("test@example.com"))
                .andExpect(jsonPath("$.fullName").value("Test User"))
                .andExpect(jsonPath("$.id").isNotEmpty())
@@ -121,6 +121,11 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-               .andExpect(status().isUnauthorized());
+               .andExpect(status().isForbidden())
+               .andExpect(jsonPath("$.timestamp").isNotEmpty())
+               .andExpect(jsonPath("$.status").value(403))
+               .andExpect(jsonPath("$.error").value("Forbidden"))
+               .andExpect(jsonPath("$.message").value("Access Denied"))
+               .andExpect(jsonPath("$.path").value("/users"));
     }
 }

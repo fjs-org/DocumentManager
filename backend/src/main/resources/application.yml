@@ -1,0 +1,44 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1/
+
+spring:
+  application:
+    name: document-manager-backend
+
+  datasource:
+    url: jdbc:h2:mem:documentdb
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  security:
+    user:
+      name: "${BASIC_AUTH_USERNAME}"
+      password: "${BASIC_AUTH_PASSWORD}"
+
+spring-doc:
+  show-actuator: true
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: DEBUG
+
+
+
+

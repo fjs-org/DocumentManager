@@ -1,0 +1,19 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1/
+
+spring:
+  security:
+    user:
+      name: x
+      password: x
+
+management:
+  endpoints:
+    web:
+      base-path: /
+
+logging:
+  level:
+    root: DEBUG

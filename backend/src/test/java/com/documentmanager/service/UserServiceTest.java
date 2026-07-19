@@ -2,6 +2,7 @@ package com.documentmanager.service;
 
 import com.documentmanager.dto.UserDto;
 import com.documentmanager.exception.EmailAlreadyExistsException;
+import com.documentmanager.exception.UserNotFoundException;
 import com.documentmanager.mapper.UserMapper;
 import com.documentmanager.model.User;
 import com.documentmanager.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,6 +76,40 @@ class UserServiceTest {
         when(userRepository.existsByEmail("duplicate@example.com")).thenReturn(true);
 
         assertThrows(EmailAlreadyExistsException.class, () -> userService.createUser(request));
+    }
+
+    @Test
+    void getUserByIdReturnsDto() {
+        UUID id = UUID.randomUUID();
+        User user = new User();
+        user.setId(id);
+        user.setEmail("alice@example.com");
+        user.setFullName("Alice");
+        user.setCreatedAt(LocalDateTime.now());
+
+        UserDto dto = new UserDto();
+        dto.setId(id);
+        dto.setEmail("alice@example.com");
+        dto.setFullName("Alice");
+        dto.setCreatedAt(user.getCreatedAt());
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+        when(userMapper.toDto(user)).thenReturn(dto);
+
+        UserDto result = userService.getUserById(id);
+
+        assertEquals(id, result.getId());
+        assertEquals("alice@example.com", result.getEmail());
+        assertEquals("Alice", result.getFullName());
+    }
+
+    @Test
+    void getUserByIdThrowsWhenNotFound() {
+        UUID id = UUID.randomUUID();
+
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.getUserById(id));
     }
 
     @Test

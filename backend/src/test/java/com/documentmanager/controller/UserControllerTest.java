@@ -2,6 +2,7 @@ package com.documentmanager.controller;
 
 import com.documentmanager.dto.UserDto;
 import com.documentmanager.exception.EmailAlreadyExistsException;
+import com.documentmanager.exception.UserNotFoundException;
 import com.documentmanager.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -111,6 +112,41 @@ class UserControllerTest {
                .andExpect(jsonPath("$.error").value("Bad Request"))
                .andExpect(jsonPath("$.message").value("Email already exists: duplicate@example.com"))
                .andExpect(jsonPath("$.path").value("/users"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin")
+    void getUserByIdReturns200() throws Exception {
+        UUID id = UUID.randomUUID();
+        UserDto dto = new UserDto();
+        dto.setId(id);
+        dto.setEmail("alice@example.com");
+        dto.setFullName("Alice");
+        dto.setCreatedAt(LocalDateTime.now());
+
+        when(userService.getUserById(id)).thenReturn(dto);
+
+        mockMvc.perform(get("/users/{id}", id))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.email").value("alice@example.com"))
+               .andExpect(jsonPath("$.fullName").value("Alice"))
+               .andExpect(jsonPath("$.id").value(id.toString()));
+    }
+
+    @Test
+    @WithMockUser(username = "admin")
+    void getUserByIdReturns404() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        when(userService.getUserById(id)).thenThrow(new UserNotFoundException(id));
+
+        mockMvc.perform(get("/users/{id}", id))
+               .andExpect(status().isNotFound())
+               .andExpect(jsonPath("$.timestamp").isNotEmpty())
+               .andExpect(jsonPath("$.status").value(404))
+               .andExpect(jsonPath("$.error").value("Not Found"))
+               .andExpect(jsonPath("$.message").value("User not found: " + id))
+               .andExpect(jsonPath("$.path").value("/users/" + id));
     }
 
     @Test

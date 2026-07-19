@@ -7,4 +7,6 @@ public interface UserService {
     UserDto createUser(UserDto dto);
 
     java.util.List<UserDto> getAllUsers();
+
+    UserDto getUserById(java.util.UUID id);
 }

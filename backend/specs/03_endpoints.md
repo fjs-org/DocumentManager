@@ -15,3 +15,7 @@
 - **Path:** `/api/v1/users`
 - **Response:** HTTP 200 with List of all users.
 
+### Get User
+- **Method:** `GET`
+- **Path:** `/api/v1/users/{id}`
+- **Response:** HTTP 200 with User object JSON if found, else HTTP 404 Not Found.

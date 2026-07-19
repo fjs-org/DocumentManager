@@ -2,6 +2,7 @@ package com.documentmanager.service;
 
 import com.documentmanager.dto.UserDto;
 import com.documentmanager.exception.EmailAlreadyExistsException;
+import com.documentmanager.exception.UserNotFoundException;
 import com.documentmanager.mapper.UserMapper;
 import com.documentmanager.model.User;
 import com.documentmanager.repository.UserRepository;
@@ -24,6 +25,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream()
                 .map(userMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public UserDto getUserById(java.util.UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        return userMapper.toDto(user);
     }
 
     @Override

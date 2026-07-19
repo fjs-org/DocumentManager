@@ -46,7 +46,8 @@ class SecurityConfigTest {
     @Test
     void healthEndpointIsPublic() throws Exception {
         mockMvc.perform(get("/health"))
-               .andExpect(status().isOk());
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.status").value("UP"));
     }
 
     @Test

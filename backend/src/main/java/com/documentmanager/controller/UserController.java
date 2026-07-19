@@ -35,7 +35,9 @@ public class UserController {
     @GetMapping
     @Operation(summary = "Get all users", description = "Returns a list of all registered users")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "List of users retrieved successfully")
+        @ApiResponse(responseCode = "200", description = "List of users retrieved successfully"),
+        @ApiResponse(responseCode = "403", description = "Unauthenticated access",
+                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
@@ -45,6 +47,8 @@ public class UserController {
     @Operation(summary = "Get user by ID", description = "Returns a single user by their UUID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "User found"),
+        @ApiResponse(responseCode = "403", description = "Unauthenticated access",
+                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "User not found",
                      content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
@@ -57,6 +61,8 @@ public class UserController {
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "User created successfully"),
         @ApiResponse(responseCode = "400", description = "Validation error or email already exists",
+                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "Unauthenticated access",
                      content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto dto) {

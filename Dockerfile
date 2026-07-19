@@ -11,9 +11,12 @@ RUN ls -lart
 # Root POM
 COPY pom.xml .
 
-# Build the app
+# Backend
 COPY backend/pom.xml ./backend/pom.xml
 COPY backend/src ./backend/src
+
+# Frotnend
+COPY frontend/pom.xml ./frontend/pom.xml
 
 RUN pwd
 RUN ls -lart

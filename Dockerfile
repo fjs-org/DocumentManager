@@ -21,7 +21,7 @@ COPY frontend/pom.xml ./frontend/pom.xml
 RUN pwd
 RUN ls -lart
 RUN mvn clean package -DskipTests
-RUN ls -lart target/
+RUN ls -lart backend/target/
 
 # --- STAGE 2: Runtime ---
 # JRE 25 is available and works perfectly

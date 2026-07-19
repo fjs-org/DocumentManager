@@ -7,7 +7,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y maven
 
 # Build the app
-COPY backend/src ./src
+RUN ls -lart src/
+COPY src ./src
 RUN mvn clean package -DskipTests
 RUN ls -la target/
 

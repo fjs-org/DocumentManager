@@ -6,13 +6,19 @@ WORKDIR /app
 # Install Maven manually
 RUN apt-get update && apt-get install -y maven
 
+RUN ls -lart
+
+# Root POM
+COPY pom.xml .
+
 # Build the app
-RUN ls -lart src
+COPY backend/pom.xml ./backend/pom.xml
+COPY backend/src ./backend/src
+
 RUN pwd
 RUN ls -lart
-COPY src ./src
 RUN mvn clean package -DskipTests
-RUN ls -la target/
+RUN ls -lart target/
 
 # --- STAGE 2: Runtime ---
 # JRE 25 is available and works perfectly

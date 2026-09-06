@@ -17,6 +17,11 @@ spring:
     show-sql: false
     database-platform: org.hibernate.dialect.H2Dialect
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 12MB
+
   security:
     user:
       name: "${BASIC_AUTH_USERNAME}"

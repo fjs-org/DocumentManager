@@ -31,6 +31,9 @@ public class Document {
     @Column(nullable = false)
     private String location;
 
+    @Column(name = "file_name")
+    private String fileName;
+
     @Lob
     @NotNull
     @Size(max = 1_048_576)
@@ -41,11 +44,15 @@ public class Document {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
     @PrePersist
     protected void onCreate() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+        this.location = "documents/" + this.id;
         this.createdAt = LocalDateTime.now();
     }
 }

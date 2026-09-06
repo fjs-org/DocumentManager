@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import io.swagger.v3.oas.annotations.servers.Server;
 
-@OpenAPIDefinition(servers = {@Server(url = "/", description = "This is the Server URL")})
+@OpenAPIDefinition(servers = {@Server(url = "/api/v1/", description = "This is the Server URL")})
 @SecuritySchemes({
     @SecurityScheme(
         name = "basicAuth",

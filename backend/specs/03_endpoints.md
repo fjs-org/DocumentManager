@@ -19,3 +19,20 @@
 - **Method:** `GET`
 - **Path:** `/api/v1/users/{id}`
 - **Response:** HTTP 200 with User object JSON if found, else HTTP 404 Not Found.
+
+## Document Endpoints
+
+### Create Document
+- **Method:** `POST`
+- **Path:** `/api/v1/documents`
+- **Request Body:**
+  - Mandatory: Multipart/form-data: Contains the `file`
+  - Document Metadata:
+    - `fileName`: String (Mandatory, original file name of the uploaded document)
+- **Business Logic:**
+    - Validate the file size:
+        - If file size > 1 MB, throw a custom `FileSizeExceededException` mapped to HTTP 400.
+    - Set ownerId to null
+    - Persist file and metadata into the database.
+- **Response:** HTTP 200 with Document object JSON (without file content) if saved successfully, else HTTP 400 Bad Request.
+

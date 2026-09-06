@@ -4,10 +4,10 @@
 
 ### 1. Document
 - `id`: UUID (Primary Key, Auto-generated)
-- `location`: String with location on files system (path to document on GCP bucket)
+- `fileName`: String (Optional, original file name of the uploaded document)
 - `data`: Binary Document (Not Null, Max size 1 MB)
 - `createdAt`: LocalDateTime (Auto-populated on creation)
-- `ownerId`: UUID (Foreign Key linking to User.id)
+- `ownerId`: UUID (Optional, Foreign Key linking to User.id)
 
 ### 2. User
 - `id`: UUID (Primary Key, Auto-generated)

@@ -71,7 +71,8 @@ class DocumentControllerTest {
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id").value(id.toString()))
                .andExpect(jsonPath("$.fileName").value("hello.txt"))
-               .andExpect(jsonPath("$.createdAt").isNotEmpty());
+               .andExpect(jsonPath("$.createdAt").isNotEmpty())
+               .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test

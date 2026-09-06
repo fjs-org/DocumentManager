@@ -34,5 +34,7 @@
         - If file size > 1 MB, throw a custom `FileSizeExceededException` mapped to HTTP 400.
     - Set ownerId to null
     - Persist file and metadata into the database.
-- **Response:** HTTP 200 with Document object JSON (without file content) if saved successfully, else HTTP 400 Bad Request.
+- **Response:** 
+  - HTTP 200 with Document object JSON if saved successfully, else HTTP 400 Bad Request.
+  - RULE: Do not place binary file in JSON response
 

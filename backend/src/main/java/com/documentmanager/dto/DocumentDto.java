@@ -1,5 +1,6 @@
 package com.documentmanager.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class DocumentDto {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY, example = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
     private UUID id;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY, example = "Q29udGVudCBvZiB0aGUgZmlsZQ==")
     private byte[] data;
 

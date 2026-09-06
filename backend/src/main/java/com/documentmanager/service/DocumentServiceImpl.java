@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DocumentServiceImpl implements DocumentService {
@@ -35,5 +37,14 @@ public class DocumentServiceImpl implements DocumentService {
         Document savedDocument = documentRepository.save(document);
         log.info("Created document with id: {}", savedDocument.getId());
         return documentMapper.toDto(savedDocument);
+    }
+
+    @Override
+    public List<DocumentDto> getAllDocuments() {
+        List<Document> documents = documentRepository.findAll();
+        log.info("Retrieved {} documents", documents.size());
+        return documents.stream()
+                .map(documentMapper::toDto)
+                .toList();
     }
 }

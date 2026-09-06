@@ -14,5 +14,6 @@ public interface DocumentMapper {
     @Mapping(target = "owner", ignore = true)
     Document toEntity(DocumentDto dto);
 
+    @Mapping(target = "data", ignore = true)
     DocumentDto toDto(Document document);
 }

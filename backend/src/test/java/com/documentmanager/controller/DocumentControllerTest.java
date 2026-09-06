@@ -19,10 +19,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -96,6 +98,26 @@ class DocumentControllerTest {
                .andExpect(jsonPath("$.error").value("Bad Request"))
                .andExpect(jsonPath("$.message").value("File size exceeds the maximum allowed size of 1 MB"))
                .andExpect(jsonPath("$.path").value("/documents"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin")
+    void getDocumentsReturns200() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        DocumentDto dto = new DocumentDto();
+        dto.setId(id);
+        dto.setFileName("hello.txt");
+        dto.setCreatedAt(LocalDateTime.now());
+
+        when(documentService.getAllDocuments()).thenReturn(List.of(dto));
+
+        mockMvc.perform(get("/documents"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(id.toString()))
+               .andExpect(jsonPath("$[0].fileName").value("hello.txt"))
+               .andExpect(jsonPath("$[0].createdAt").isNotEmpty())
+               .andExpect(jsonPath("$[0].data").doesNotExist());
     }
 
     @Test

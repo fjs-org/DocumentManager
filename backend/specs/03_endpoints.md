@@ -38,3 +38,9 @@
   - HTTP 200 with Document object JSON if saved successfully, else HTTP 400 Bad Request.
   - RULE: Do not place binary file in JSON response
 
+### Get Documents
+- **Method:** `GET`
+- **Path:** `/api/v1/documents`
+- **Response:** HTTP 200 with List of all documents.
+- **Business Logic:**
+    - Return only metadata of documents (id, fileName, ownerId, createdAt) without binary content.

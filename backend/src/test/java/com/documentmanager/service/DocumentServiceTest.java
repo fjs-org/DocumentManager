@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,6 +62,30 @@ class DocumentServiceTest {
         assertNull(entity.getId());
         assertNull(entity.getLocation());
         assertNull(entity.getCreatedAt());
+    }
+
+    @Test
+    void getAllDocumentsReturnsListOfDtos() {
+        UUID id = UUID.randomUUID();
+
+        Document document = new Document();
+        document.setId(id);
+        document.setFileName("hello.txt");
+        document.setCreatedAt(LocalDateTime.now());
+
+        DocumentDto dto = new DocumentDto();
+        dto.setId(id);
+        dto.setFileName("hello.txt");
+        dto.setCreatedAt(document.getCreatedAt());
+
+        when(documentRepository.findAll()).thenReturn(List.of(document));
+        when(documentMapper.toDto(document)).thenReturn(dto);
+
+        List<DocumentDto> result = documentService.getAllDocuments();
+
+        assertEquals(1, result.size());
+        assertEquals(id, result.getFirst().getId());
+        assertEquals("hello.txt", result.getFirst().getFileName());
     }
 
     @Test

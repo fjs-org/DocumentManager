@@ -43,4 +43,11 @@
 - **Path:** `/api/v1/documents`
 - **Response:** HTTP 200 with List of all documents.
 - **Business Logic:**
-    - Return only metadata of documents (id, fileName, ownerId, createdAt) without binary content.
+    - Return only metadata of documents (id, fileName, createdAt) without binary content.
+
+### Get Document
+- **Method:** `GET`
+- *Path:* `/api/v1/documents/{id}`
+- **Response:** HTTP 200 with Document object JSON if found, else HTTP 404 Not Found.
+- **Business Logic:**
+  - Return metadata of the document (id, fileName, createdAt) including binary content (data).

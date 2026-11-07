@@ -1,6 +1,8 @@
 package com.documentmanager.service;
 
+import com.documentmanager.dto.DocumentContentDto;
 import com.documentmanager.dto.DocumentDto;
+import com.documentmanager.exception.DocumentNotFoundException;
 import com.documentmanager.exception.FileSizeExceededException;
 import com.documentmanager.mapper.DocumentMapper;
 import com.documentmanager.model.Document;
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +49,13 @@ public class DocumentServiceImpl implements DocumentService {
         return documents.stream()
                 .map(documentMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public DocumentContentDto getDocumentById(UUID id) {
+        Document document = documentRepository.findById(id)
+                .orElseThrow(() -> new DocumentNotFoundException(id));
+        log.info("Retrieved document with id: {}", document.getId());
+        return documentMapper.toContentDto(document);
     }
 }

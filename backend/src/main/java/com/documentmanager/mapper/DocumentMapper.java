@@ -1,5 +1,6 @@
 package com.documentmanager.mapper;
 
+import com.documentmanager.dto.DocumentContentDto;
 import com.documentmanager.dto.DocumentDto;
 import com.documentmanager.model.Document;
 import org.mapstruct.Mapper;
@@ -16,4 +17,6 @@ public interface DocumentMapper {
 
     @Mapping(target = "data", ignore = true)
     DocumentDto toDto(Document document);
+
+    DocumentContentDto toContentDto(Document document);
 }

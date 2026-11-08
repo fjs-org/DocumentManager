@@ -7,24 +7,35 @@ import com.documentmanager.exception.FileSizeExceededException;
 import com.documentmanager.mapper.DocumentMapper;
 import com.documentmanager.model.Document;
 import com.documentmanager.repository.DocumentRepository;
+import com.documentmanager.util.DocumentContentExtractor;
+import com.documentmanager.util.ImageContentExtractor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class DocumentServiceImpl implements DocumentService {
 
-    private static final long MAX_FILE_SIZE_BYTES = 1_048_576L;
+    private static final long MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024L;
+
+    private static final String PDF_EXTENSION = ".pdf";
+
+    private static final String JPG_EXTENSION = ".jpg";
+
+    private static final String JPEG_EXTENSION = ".jpeg";
 
     private static final Logger log = LoggerFactory.getLogger(DocumentServiceImpl.class);
 
     private final DocumentRepository documentRepository;
     private final DocumentMapper documentMapper;
+    private final DocumentContentExtractor documentContentExtractor;
+    private final ImageContentExtractor imageContentExtractor;
 
     @Override
     public DocumentDto createDocument(DocumentDto dto) {
@@ -56,6 +67,25 @@ public class DocumentServiceImpl implements DocumentService {
         Document document = documentRepository.findById(id)
                 .orElseThrow(() -> new DocumentNotFoundException(id));
         log.info("Retrieved document with id: {}", document.getId());
-        return documentMapper.toContentDto(document);
+
+        DocumentContentDto dto = documentMapper.toContentDto(document);
+        if (isPdf(document.getFileName())) {
+            dto.setContent(documentContentExtractor.extractText(document.getData()));
+        } else if (isJpg(document.getFileName())) {
+            dto.setContent(imageContentExtractor.extractText(document.getData()));
+        }
+        return dto;
+    }
+
+    private boolean isPdf(String fileName) {
+        return hasExtension(fileName, PDF_EXTENSION);
+    }
+
+    private boolean isJpg(String fileName) {
+        return hasExtension(fileName, JPG_EXTENSION) || hasExtension(fileName, JPEG_EXTENSION);
+    }
+
+    private boolean hasExtension(String fileName, String extension) {
+        return fileName != null && fileName.toLowerCase(Locale.ROOT).endsWith(extension);
     }
 }

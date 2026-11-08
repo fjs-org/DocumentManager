@@ -1,6 +1,8 @@
 package com.documentmanager.controller;
 
+import com.documentmanager.dto.DocumentContentDto;
 import com.documentmanager.dto.DocumentDto;
+import com.documentmanager.exception.DocumentNotFoundException;
 import com.documentmanager.exception.FileSizeExceededException;
 import com.documentmanager.service.DocumentService;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,7 +98,7 @@ class DocumentControllerTest {
                .andExpect(jsonPath("$.timestamp").isNotEmpty())
                .andExpect(jsonPath("$.status").value(400))
                .andExpect(jsonPath("$.error").value("Bad Request"))
-               .andExpect(jsonPath("$.message").value("File size exceeds the maximum allowed size of 1 MB"))
+               .andExpect(jsonPath("$.message").value("File size exceeds the maximum allowed size of 10 MB"))
                .andExpect(jsonPath("$.path").value("/documents"));
     }
 
@@ -135,5 +137,42 @@ class DocumentControllerTest {
                .andExpect(status().isBadRequest())
                .andExpect(jsonPath("$.status").value(400))
                .andExpect(jsonPath("$.error").value("Bad Request"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin")
+    void getDocumentByIdReturns200WithContent() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        DocumentContentDto dto = new DocumentContentDto();
+        dto.setId(id);
+        dto.setFileName("report.pdf");
+        dto.setCreatedAt(LocalDateTime.now());
+        dto.setData("pdf bytes".getBytes(StandardCharsets.UTF_8));
+        dto.setContent("extracted text");
+
+        when(documentService.getDocumentById(id)).thenReturn(dto);
+
+        mockMvc.perform(get("/documents/{id}", id))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id").value(id.toString()))
+               .andExpect(jsonPath("$.fileName").value("report.pdf"))
+               .andExpect(jsonPath("$.createdAt").isNotEmpty())
+               .andExpect(jsonPath("$.data").isNotEmpty())
+               .andExpect(jsonPath("$.content").value("extracted text"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin")
+    void getDocumentByIdReturns404WhenNotFound() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        when(documentService.getDocumentById(id)).thenThrow(new DocumentNotFoundException(id));
+
+        mockMvc.perform(get("/documents/{id}", id))
+               .andExpect(status().isNotFound())
+               .andExpect(jsonPath("$.status").value(404))
+               .andExpect(jsonPath("$.error").value("Not Found"))
+               .andExpect(jsonPath("$.message").value("Document not found: " + id));
     }
 }

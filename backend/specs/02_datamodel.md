@@ -5,7 +5,7 @@
 ### 1. Document
 - `id`: UUID (Primary Key, Auto-generated)
 - `fileName`: String (Optional, original file name of the uploaded document)
-- `data`: Binary Document (Not Null, Max size 1 MB)
+- `data`: Binary Document (Not Null, Max size 10 MB)
 - `createdAt`: LocalDateTime (Auto-populated on creation)
 - `ownerId`: UUID (Optional, Foreign Key linking to User.id)
 

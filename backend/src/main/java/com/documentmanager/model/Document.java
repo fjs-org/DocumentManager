@@ -36,7 +36,7 @@ public class Document {
 
     @Lob
     @NotNull
-    @Size(max = 1_048_576)
+    @Size(max = 10_485_760)
     @Column(nullable = false, columnDefinition = "BLOB")
     private byte[] data;
 

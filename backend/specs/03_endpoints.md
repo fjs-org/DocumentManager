@@ -31,7 +31,7 @@
     - `fileName`: String (Mandatory, original file name of the uploaded document)
 - **Business Logic:**
     - Validate the file size:
-        - If file size > 1 MB, throw a custom `FileSizeExceededException` mapped to HTTP 400.
+        - If file size > 10 MB, throw a custom `FileSizeExceededException` mapped to HTTP 400.
     - Set ownerId to null
     - Persist file and metadata into the database.
 - **Response:** 
@@ -50,4 +50,10 @@
 - *Path:* `/api/v1/documents/{id}`
 - **Response:** HTTP 200 with Document object JSON if found, else HTTP 404 Not Found.
 - **Business Logic:**
-  - Return metadata of the document (id, fileName, createdAt) including binary content (data).
+  - Retrieve persisted document by id.
+  - If document is a .pdf-document, use Apache Tika to extract content of the document.
+  - If document is a .jpg-document, use tess4j to extract content of the image.
+  - Return:
+    - metadata of the document (id, fileName, createdAt) 
+    - binary content (data)
+    - extracted content (if applicable)

@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
         var body = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",
-                "File exceeds the maximum allowed size of 1 MB",
+                "File exceeds the maximum allowed size of 10 MB",
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
@@ -87,6 +87,18 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(DocumentContentExtractionException.class)
+    public ResponseEntity<ErrorResponse> handleDocumentContentExtraction(DocumentContentExtractionException ex,
+                                                                          HttpServletRequest request) {
+        var body = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Internal Server Error",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
     @ExceptionHandler(MissingServletRequestPartException.class)

@@ -18,5 +18,6 @@ public interface DocumentMapper {
     @Mapping(target = "data", ignore = true)
     DocumentDto toDto(Document document);
 
+    @Mapping(target = "content", ignore = true)
     DocumentContentDto toContentDto(Document document);
 }

@@ -48,10 +48,13 @@ public class DocumentController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a document",
-            description = "Returns metadata (id, fileName, createdAt) including binary content (data) of the document")
+            description = "Returns metadata (id, fileName, createdAt), binary content (data) and, for PDF documents, "
+                    + "the text extracted with Apache Tika (content). For .jpg images the text is extracted with Tess4J.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Document retrieved successfully"),
         @ApiResponse(responseCode = "404", description = "Document not found",
+                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Content extraction failed",
                      content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<DocumentContentDto> getDocumentById(@PathVariable UUID id) {

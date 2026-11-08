@@ -22,4 +22,8 @@ public class DocumentContentDto {
 
     @Schema(description = "Binary content of the document", example = "Q29udGVudCBvZiB0aGUgZmlsZQ==")
     private byte[] data;
+
+    @Schema(description = "Extracted text content of the document",
+            example = "Content of the file")
+    private String content;
 }

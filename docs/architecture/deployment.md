@@ -9,7 +9,7 @@ graph TB
             GFE[Google Front End<br/>TLS Termination]
             Proxy[Cloud Run Container]
 
-            subgraph "Container - eclipse-temurin:25-jre-alpine"
+            subgraph "Container - eclipse-temurin:25-jre-resolute"
                 SpringBoot[Spring Boot Application]
                 subgraph "Ports"
                     Port8080[":8080"]
@@ -61,7 +61,7 @@ flowchart LR
 
     subgraph "Stage 2 - Runtime"
         direction TB
-        Base2[eclipse-temurin:25-jre-alpine]
+        Base2[eclipse-temurin:25-jre-resolute]
         User[adduser spring]
         CopyJar[Copy JAR from build stage]
         Entry[java -jar app.jar]

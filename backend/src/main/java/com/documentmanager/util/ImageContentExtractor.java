@@ -23,7 +23,10 @@ public class ImageContentExtractor {
         this.tesseract = new Tesseract();
         this.tesseract.setLanguage("eng");
 
-        String tessDataPath = "backend/src/main/resources/tessdata";
+        String tessDataPath = System.getenv().getOrDefault(
+                "TESSDATA_PREFIX",
+                "backend/src/main/resources/tessdata"
+        );
         tesseract.setDatapath(tessDataPath);
     }
 

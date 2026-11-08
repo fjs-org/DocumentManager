@@ -36,8 +36,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         tesseract-ocr \
         tesseract-ocr-eng && \
-    TESS_LIB="$(find /usr/lib -name 'libtesseract.so.5' -print -quit)" && \
-    LEPT_LIB="$(find /usr/lib -name 'liblept.so.5' -print -quit)" && \
+    TESS_LIB="$(find /usr/lib -name 'libtesseract.so.*' -print -quit)" && \
+    LEPT_LIB="$(find /usr/lib \( -name 'libleptonica.so.*' -o -name 'liblept.so.*' \) -print -quit)" && \
     test -n "$TESS_LIB" && \
     test -n "$LEPT_LIB" && \
     ln -sf "$TESS_LIB" /usr/lib/libtesseract.so && \
